@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: airflow
+  labels:
+    app: airflow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: airflow
+  template:
+    metadata:
+      name: airflow
+      labels:
+        app: airflow
+    spec:
+      containers:
+        - name: airflow
+          image: airflow
+      imagePullSecrets:
+        - name: regcred
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: airflow
+spec:
+  selector:
+    app: airflow
+  ports:
+    - protocol: TCP
+      port: 8080

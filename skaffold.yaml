@@ -1,0 +1,51 @@
+# nonk8s
+apiVersion: skaffold/v2beta29
+kind: Config
+metadata:
+  name: spark-on-k8s
+build:
+  local:
+    useBuildkit: false
+    concurrency: 2
+  tagPolicy:
+    gitCommit: {}
+  artifacts:
+    - image: spark-base-image
+      context: images/base-images/spark-base-image
+      docker:
+        buildArgs:
+          SPARK_VERSION: 3.5.0
+    - image: spark-app-example
+      context: images/custom-images/spark-app-example
+
+deploy:
+  kustomize:
+    paths:
+      - deployment/overlays/dev
+
+profiles:
+  - name: batch
+    patches:
+      - op: add
+        path: /build/artifacts/-
+        value:
+          image: sparkhs
+          context: services/sparkhs
+          requires:
+            - image: spark-base-image
+              alias: SPARK_BASE_IMAGE
+          docker:
+            target: RUNTIME
+
+  - name: dev
+    patches:
+      - op: add
+        path: /build/artifacts/-
+        value:
+          image: sparkhs
+          context: services/sparkhs
+          requires:
+            - image: spark-base-image
+              alias: SPARK_BASE_IMAGE
+          docker:
+            target: RUNTIME

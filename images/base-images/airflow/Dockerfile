@@ -13,10 +13,10 @@ RUN pip install --upgrade pip
 
 RUN pip install apache-airflow==2.7.1
 RUN pip install 'apache-airflow[kubernetes]'
-RUN pip install 'apache-airflow[postgres]'
 
-COPY airflow-test-env-init.sh /tmp/airflow-test-env-init.sh
+WORKDIR /opt/airflow
 
-COPY bootstrap.sh /bootstrap.sh
-RUN chmod +x /bootstrap.sh
-ENTRYPOINT ["/bootstrap.sh"]
+COPY entrypoint.sh /opt/airflow/entrypoint.sh
+RUN chmod +x /opt/airflow/entrypoint.sh
+
+ENTRYPOINT ["/opt/airflow/bootstrap.sh"]

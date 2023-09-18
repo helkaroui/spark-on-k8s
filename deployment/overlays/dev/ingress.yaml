@@ -4,7 +4,7 @@ metadata:
   name: dev-ingress
 spec:
   rules:
-    - host: dev.home.local
+    - host: spark-hs.dev.local
       http:
         paths:
           - backend:
@@ -14,3 +14,13 @@ spec:
                   number: 18080
             path: /
             pathType: Prefix
+#    - host: airflow.dev.local
+#      http:
+#        paths:
+#          - backend:
+#              service:
+#                name: airflow
+#                port:
+#                  number: 8080
+#            path: /
+#            pathType: Prefix

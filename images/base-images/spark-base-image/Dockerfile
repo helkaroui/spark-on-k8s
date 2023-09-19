@@ -16,7 +16,7 @@ RUN mkdir -p ${SRC_DIR} \
     && curl -skL -XGET https://github.com/apache/spark/archive/refs/tags/v${SPARK_VERSION}.zip -o ${SRC_DIR}/spark.zip \
     && unzip -qq spark.zip \
     && cd spark-${SPARK_VERSION} \
-    && mvn install -pl core,streaming,assembly -Pkubernetes -Phive -Phiver-thriftserver -DskipTests \
+    && mvn install -pl core,streaming,assembly -Pkubernetes -Phive -Phive-thriftserver -T 4 -DskipTests --no-transfer-progress \
     && cp -r sbin bin conf assembly/target/scala-2.12/jars ${DIST_DIR} \
     && mvn clean \
     && rm -rf ${SRC_DIR}
@@ -44,7 +44,7 @@ ENV SPARK_HOME="/opt/spark" \
     PATH="${SPARK_HOME}/bin:${SPARK_HOME}/sbin/:/opt/:${PATH}"
 
 COPY --from=BUILD --chown=185:185 /opt/spark ${SPARK_HOME}
-COPY *.sh ${SPARK_HOME}/sbin
+COPY --chown=185:185 *.sh ${SPARK_HOME}/sbin/
 
 RUN chmod g+w ${SPARK_HOME}/work-dir \
       && chmod a+x ${SPARK_HOME}/sbin/*.sh \

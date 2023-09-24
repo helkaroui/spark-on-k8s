@@ -4,22 +4,44 @@ metadata:
   name: dev-ingress
 spec:
   rules:
-    - host: spark-hs.dev.local
-      http:
-        paths:
-          - backend:
-              service:
-                name: sparkhs
-                port:
-                  number: 18080
-            path: /
-            pathType: Prefix
-#    - host: airflow.dev.local
+  - host: s3-console.dev.local
+    http:
+      paths:
+      - backend:
+          service:
+            name: s3
+            port:
+              number: 9001
+        path: /
+        pathType: Prefix
+
+  - host: spark-hs.dev.local
+    http:
+      paths:
+      - backend:
+          service:
+            name: sparkhs
+            port:
+              number: 18080
+        path: /
+        pathType: Prefix
+
+  - host: airflow.dev.local
+    http:
+      paths:
+      - backend:
+          service:
+            name: airflow
+            port:
+              number: 8080
+        path: /
+        pathType: Prefix
+#    - host: argocd.dev.local
 #      http:
 #        paths:
 #          - backend:
 #              service:
-#                name: airflow
+#                name: argocd
 #                port:
 #                  number: 8080
 #            path: /

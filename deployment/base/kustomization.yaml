@@ -2,3 +2,4 @@ bases:
 - ../../services/sparkhs
 - ../../services/spark-reverse-proxy
 - ../../services/s3
+- ../../services/airflow

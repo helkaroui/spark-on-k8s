@@ -16,10 +16,14 @@ spec:
         app: airflow
     spec:
       containers:
-        - name: airflow
-          image: airflow
+      - name: airflow-webserver
+        image: airflow
+        command: ["/opt/airflow/entrypoint.sh", "webserver"]
+      #- name: airflow-scheduler
+      #  image: airflow
+      #  command: ["/opt/airflow/entrypoint.sh", "scheduler"]
       imagePullSecrets:
-        - name: regcred
+      - name: regcred
 ---
 
 apiVersion: v1
@@ -30,5 +34,5 @@ spec:
   selector:
     app: airflow
   ports:
-    - protocol: TCP
-      port: 8080
+  - protocol: TCP
+    port: 8080

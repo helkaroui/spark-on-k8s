@@ -3,6 +3,7 @@
 if [ "$1" = "webserver" ]
 then
 	exec airflow webserver
+	#exec airflow scheduler
 fi
 
 if [ "$1" = "scheduler" ]

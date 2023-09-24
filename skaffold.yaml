@@ -55,7 +55,8 @@ profiles:
       docker:
         target: RUNTIME
 
-- name: dev
+
+- name: airflow
   deploy:
     kustomize:
       paths:
@@ -88,12 +89,19 @@ profiles:
       context: services/s3
       docker:
         target: RUNTIME
+  - op: add
+    path: /build/artifacts/-
+    value:
+      image: airflow
+      context: services/airflow
+      docker:
+        target: RUNTIME
 
-- name: prod
+- name: dev
   deploy:
     kustomize:
       paths:
-      - deployment/overlays/prod
+      - deployment/overlays/dev
   patches:
   - op: add
     path: /build/artifacts/-
@@ -103,5 +111,22 @@ profiles:
       requires:
       - image: spark-base-image
         alias: SPARK_BASE_IMAGE
+      docker:
+        target: RUNTIME
+  - op: add
+    path: /build/artifacts/-
+    value:
+      image: spark-reverse-proxy
+      context: services/spark-reverse-proxy
+      requires:
+      - image: ui-reverse-proxy
+        alias: REVERSE_PROXY_IMAGE
+      docker:
+        target: RUNTIME
+  - op: add
+    path: /build/artifacts/-
+    value:
+      image: s3
+      context: services/s3
       docker:
         target: RUNTIME

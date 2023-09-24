@@ -3,7 +3,8 @@ package server
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	handlers "reverse-proxy/pkg/handlers"
+	"reverse-proxy/handlers"
+	"time"
 )
 
 func Run(config Config) {
@@ -17,11 +18,17 @@ func Run(config Config) {
 		ModifyRedirectUrl:         config.ModifyRedirectUrl,
 	}
 
-	router.GET("/health", handlers.HealthCheck)
+	router.GET("/version", handlers.Version)
 
-	router.GET("/sparkui/*path",
+	now := time.Now()
+	router.GET("/health",
 		func(context *gin.Context) {
-			handlers.ServeSparkUI(context, &apiConfig, "/sparkui")
+			handlers.HealthCheck(context, now.Format(time.RFC3339))
+		})
+
+	router.GET(fmt.Sprintf("/%s/*path", config.ProxyBaseUri),
+		func(context *gin.Context) {
+			handlers.ServeSparkUI(context, &apiConfig, fmt.Sprintf("/%s", config.ProxyBaseUri))
 		})
 
 	router.Run(fmt.Sprintf(":%d", port))

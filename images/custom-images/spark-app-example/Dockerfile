@@ -10,7 +10,7 @@ RUN mkdir -p $SRC_DIR \
 COPY . $SRC_DIR
 
 RUN cd $SRC_DIR \
-    && sbt 'set test / assembly := {}' clean assembly \
+    && sbt 'set test in assembly := {}' clean assembly \
     && cp target/scala-3.3.1/spark-app-example.jar $APP_DIR/
 
 WORKDIR $APP_DIR

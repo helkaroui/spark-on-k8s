@@ -1,7 +1,7 @@
 batch:
 	echo "Starting Skaffold using profile: batch"
-	skaffold dev -n default -p batch --status-check=false
+	skaffold dev -n default -p batch --status-check=false --tail
 
 dev:
 	echo "Running Skaffold in Hot reloading mode"
-	skaffold dev -n default -p dev --status-check=false
+	skaffold dev -n default -p dev --status-check=false --tail

@@ -1,2 +1,4 @@
 bases:
-  - ../../services/sparkhs
+- ../../services/sparkhs
+- ../../services/spark-reverse-proxy
+- ../../services/s3

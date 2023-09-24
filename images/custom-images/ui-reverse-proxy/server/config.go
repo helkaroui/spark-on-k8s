@@ -5,4 +5,5 @@ type Config struct {
 	SparkApplicationNamespace string
 	SparkUIServiceUrl         string
 	ModifyRedirectUrl         bool
+	ProxyBaseUri              string
 }

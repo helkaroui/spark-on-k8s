@@ -1,4 +1,4 @@
-module github.com/datapunchorg/spark-ui-reverse-proxy
+module reverse-proxy
 
 go 1.17
 

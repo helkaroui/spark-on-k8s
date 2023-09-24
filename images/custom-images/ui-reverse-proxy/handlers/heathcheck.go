@@ -5,6 +5,6 @@ import (
 	"net/http"
 )
 
-func HealthCheck(c *gin.Context) {
-	c.String(http.StatusOK, "OK")
+func HealthCheck(c *gin.Context, startedAt string) {
+	c.JSON(http.StatusOK, gin.H{"status": "ok", "started_at": startedAt})
 }

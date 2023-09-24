@@ -9,5 +9,5 @@ spark-submit \
     --name spark-pi \
     --class dev.sharek.examples.SparkPi \
     --conf spark.executor.instances=2 \
-    --conf spark.kubernetes.container.image=<spark-image> \
+    --conf spark.kubernetes.container.image=spark-base-image \
     local:///opt/spark/work-dir/spark-app-example.jar

@@ -1,5 +1,9 @@
 bases:
-- ../../services/sparkhs
+- ../../services/spark-history-server
 - ../../services/spark-reverse-proxy
+- ../../services/spark-submit-job
 - ../../services/s3
 - ../../services/airflow
+
+resources:
+- spark-sa.yaml

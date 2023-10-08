@@ -20,7 +20,7 @@ spec:
       paths:
       - backend:
           service:
-            name: sparkhs
+            name: spark-history-server
             port:
               number: 18080
         path: /
@@ -36,13 +36,3 @@ spec:
               number: 8080
         path: /
         pathType: Prefix
-#    - host: argocd.dev.local
-#      http:
-#        paths:
-#          - backend:
-#              service:
-#                name: argocd
-#                port:
-#                  number: 8080
-#            path: /
-#            pathType: Prefix

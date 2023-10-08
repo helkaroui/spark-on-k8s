@@ -18,7 +18,7 @@ spec:
       containers:
       - name: s3
         image: s3
-        command: ["/entrypoint", "serve"]
+        command: ["/entrypoint"]
         env:
         - name: PORT
           value: "9000"

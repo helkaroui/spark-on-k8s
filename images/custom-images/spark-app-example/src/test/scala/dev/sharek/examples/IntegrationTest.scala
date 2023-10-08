@@ -1,8 +1,9 @@
 package dev.sharek.examples
 
+import dev.sharek.examples.SparkPi.SparkPiLogic
 import org.apache.spark.sql.SparkSession
 import org.scalatest.funsuite.AnyFunSuite
-import org.scalatest.matchers.must.Matchers.*
+import org.scalatest.matchers.must.Matchers._
 
 class IntegrationTest extends AnyFunSuite {
 

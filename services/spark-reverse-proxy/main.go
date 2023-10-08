@@ -1,8 +1,12 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"github.com/golang/glog"
+	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/rest"
 	"log"
 	"reverse-proxy/server"
 )
@@ -19,6 +23,29 @@ func main() {
 	flag.Parse()
 
 	log.Printf("Starting server on port %d, application namespace: %s", *port, *namespace)
+
+	k8sConfig, err := rest.InClusterConfig()
+	if err != nil {
+		panic(err.Error())
+	}
+
+	k8sClientSet, err := kubernetes.NewForConfig(k8sConfig)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	pods, err := k8sClientSet.CoreV1().Pods(*namespace).List(context.TODO(), metaV1.ListOptions{})
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	log.Printf("There are %d pods", len(pods.Items))
+
+	log.Printf("N	Name	Labels")
+	for i, item := range pods.Items {
+		log.Printf("%d	%s	%s", i, item.Name, item.Labels)
+	}
 
 	config := server.Config{
 		Port:                      *port,

@@ -1,4 +1,4 @@
-val scala3Version = "3.3.1"
+val scala2Version = "2.13.2"
 
 lazy val root = project
   .in(file("."))
@@ -6,18 +6,16 @@ lazy val root = project
     name := "spark-app-example",
     version := "0.1.0-SNAPSHOT",
 
-    scalaVersion := scala3Version,
+    scalaVersion := scala2Version,
 
     assembly / assemblyJarName := "spark-app-example.jar",
 
     libraryDependencies ++= Seq(
-      "org.apache.spark" %% "spark-sql" % "3.5.0" % Provided cross CrossVersion.for3Use2_13,
-      "org.apache.spark" %% "spark-streaming" % "3.5.0" % Provided cross CrossVersion.for3Use2_13,
+      "org.apache.spark" %% "spark-sql" % "3.5.0" % Provided,
+      "org.apache.spark" %% "spark-streaming" % "3.5.0" % Provided,
 
-      "org.scalatest" % "scalatest_3" % "3.2.15" % Test excludeAll (
-          ExclusionRule(organization = "org.scala-lang.modules")
-        ),
-      "org.apache.spark" %% "spark-core" % "3.5.0" % Test cross CrossVersion.for3Use2_13,
-      "org.apache.spark" %% "spark-sql" % "3.5.0" % Test cross CrossVersion.for3Use2_13
+      "org.scalatest" %% "scalatest" % "3.2.15" % Test,
+      "org.apache.spark" %% "spark-core" % "3.5.0" % Test,
+      "org.apache.spark" %% "spark-sql" % "3.5.0" % Test
     )
   )

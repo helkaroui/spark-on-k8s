@@ -8,27 +8,30 @@ ARG SPARK_VERSION
 ENV SPARK_VERSION=${SPARK_VERSION}
 
 RUN apt-get update \
-    && apt-get install -y unzip
+    && apt-get install -y unzip \
+    && mkdir -p ${SRC_DIR} \
+    && mkdir -p ${DIST_DIR}
 
-RUN mkdir -p ${SRC_DIR} \
-    && mkdir -p ${DIST_DIR} \
-    && cd ${SRC_DIR} \
+COPY patches/s3a-support.patch ${SRC_DIR}
+
+RUN cd ${SRC_DIR} \
     && curl -skL -XGET https://github.com/apache/spark/archive/refs/tags/v${SPARK_VERSION}.zip -o ${SRC_DIR}/spark.zip \
     && unzip -qq spark.zip \
     && cd spark-${SPARK_VERSION} \
-    && mvn install -pl core,streaming,assembly -Pkubernetes -Phive -Phive-thriftserver -T 4 -DskipTests --no-transfer-progress \
-    && cp -r sbin bin conf assembly/target/scala-2.12/jars ${DIST_DIR} \
+    && git apply ../s3a-support.patch \
+    && mvn install -pl core,streaming,assembly -Pscala-2.13 -Pscala-2.12 -Pkubernetes -Phive -Phive-thriftserver -T 1 -DskipTests --no-transfer-progress -e \
+    && cp -r sbin bin conf assembly/target/scala-2.13/jars ${DIST_DIR} \
     && mvn clean \
     && rm -rf ${SRC_DIR}
 
-FROM eclipse-temurin:8-focal as RUNTIME
+FROM openjdk:11-jre-slim as RUNTIME
 
 ARG spark_uid=185
 
 RUN set -ex && \
     apt-get update && \
     ln -s /lib /lib64 && \
-    apt install -y bash tini && \
+    apt install -y bash tini procps && \
     mkdir -p /opt/spark && \
     mkdir -p /opt/spark/examples && \
     mkdir -p /opt/spark/work-dir && \
@@ -46,13 +49,16 @@ ENV SPARK_HOME="/opt/spark" \
 COPY --from=BUILD --chown=185:185 /opt/spark ${SPARK_HOME}
 COPY --chown=185:185 *.sh ${SPARK_HOME}/sbin/
 
-RUN chmod g+w ${SPARK_HOME}/work-dir \
-      && chmod a+x ${SPARK_HOME}/sbin/*.sh \
-      && chmod a+x ${SPARK_HOME}/bin/*.sh
-
 WORKDIR ${SPARK_HOME}/work-dir
 
-ENTRYPOINT [ "entrypoint.sh" ]
+COPY entrypoint.sh /opt/spark/work-dir/
+
+RUN chmod g+w ${SPARK_HOME}/work-dir \
+      && chmod a+x ${SPARK_HOME}/sbin/*.sh \
+      && chmod a+x ${SPARK_HOME}/bin/*.sh \
+      && chmod a+x /opt/spark/work-dir/*.sh
+
+ENTRYPOINT [ "/opt/spark/work-dir/entrypoint.sh" ]
 
 # Specify the User that the actual main process will run as
 USER ${spark_uid}

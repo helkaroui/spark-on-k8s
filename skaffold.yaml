@@ -6,9 +6,9 @@ metadata:
 build:
   local:
     useBuildkit: false
-    concurrency: 2
+    concurrency: 1
   tagPolicy:
-    gitCommit: {}
+    sha256: {}
   artifacts:
   - image: spark-base-image
     context: images/base-images/spark-base-image
@@ -17,10 +17,46 @@ build:
         SPARK_VERSION: 3.5.0
   - image: spark-app-example
     context: images/custom-images/spark-app-example
-  - image: ui-reverse-proxy
-    context: images/custom-images/ui-reverse-proxy
+    #- image: ui-reverse-proxy
+    #  context: images/custom-images/ui-reverse-proxy
 
 profiles:
+- name: spark-submit
+  deploy:
+    kustomize:
+      paths:
+      - deployment/overlays/dev
+  patches:
+  #- op: add
+  #  path: /build/artifacts/-
+  #  value:
+  #    image: spark-reverse-proxy
+  #    context: services/spark-reverse-proxy
+  #    requires:
+  #    - image: ui-reverse-proxy
+  #      alias: REVERSE_PROXY_IMAGE
+  #    docker:
+  #      target: RUNTIME
+  - op: add
+    path: /build/artifacts/-
+    value:
+      image: spark-submit-job
+      context: services/spark-submit-job
+      requires:
+      - image: spark-base-image
+        alias: SPARK_BASE_IMAGE
+      - image: spark-app-example
+        alias: SPARK_APP_EXAMPLE_IMAGE
+      docker:
+        target: RUNTIME
+  - op: add
+    path: /build/artifacts/-
+    value:
+      image: s3
+      context: services/s3
+      docker:
+        target: RUNTIME
+
 - name: batch
   deploy:
     kustomize:
@@ -30,8 +66,8 @@ profiles:
   - op: add
     path: /build/artifacts/-
     value:
-      image: sparkhs
-      context: services/sparkhs
+      image: spark-history-server
+      context: services/spark-history-server
       requires:
       - image: spark-base-image
         alias: SPARK_BASE_IMAGE
@@ -45,6 +81,18 @@ profiles:
       requires:
       - image: ui-reverse-proxy
         alias: REVERSE_PROXY_IMAGE
+      docker:
+        target: RUNTIME
+  - op: add
+    path: /build/artifacts/-
+    value:
+      image: spark-submit-job
+      context: services/spark-submit-job
+      requires:
+      - image: spark-base-image
+        alias: SPARK_BASE_IMAGE
+      - image: spark-app-example
+        alias: SPARK_APP_EXAMPLE_IMAGE
       docker:
         target: RUNTIME
   - op: add
@@ -65,8 +113,8 @@ profiles:
   - op: add
     path: /build/artifacts/-
     value:
-      image: sparkhs
-      context: services/sparkhs
+      image: spark-history-server
+      context: services/spark-history-server
       requires:
       - image: spark-base-image
         alias: SPARK_BASE_IMAGE
@@ -106,8 +154,8 @@ profiles:
   - op: add
     path: /build/artifacts/-
     value:
-      image: sparkhs
-      context: services/sparkhs
+      image: spark-history-server
+      context: services/spark-history-server
       requires:
       - image: spark-base-image
         alias: SPARK_BASE_IMAGE

@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: spark-submit-job
+spec:
+  suspend: false
+  template:
+    spec:
+      containers:
+      - name: spark-submit-job
+        image: spark-submit-job
+        env:
+        - name: SERVICE_ACCOUNT_NAME
+          value: spark-sa
+      restartPolicy: Never
+      serviceAccountName: spark-sa

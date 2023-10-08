@@ -1,0 +1,21 @@
+Index: assembly/pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/assembly/pom.xml b/assembly/pom.xml
+--- a/assembly/pom.xml	(revision 4661275f095043a3bc797be730550f3b5206c766)
++++ b/assembly/pom.xml	(date 1696158903516)
+@@ -85,6 +85,12 @@
+       <artifactId>guava</artifactId>
+       <scope>${hadoop.deps.scope}</scope>
+     </dependency>
++
++    <dependency>
++      <groupId>org.apache.hadoop</groupId>
++      <artifactId>hadoop-aws</artifactId>
++      <version>${hadoop.version}</version>
++    </dependency>
+   </dependencies>
+ 
+   <build>

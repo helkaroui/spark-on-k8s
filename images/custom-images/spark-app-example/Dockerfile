@@ -11,6 +11,6 @@ COPY . $SRC_DIR
 
 RUN cd $SRC_DIR \
     && sbt 'set test in assembly := {}' clean assembly \
-    && cp target/scala-2.13/spark-app-example.jar $APP_DIR/
+    && cp target/scala-2.12/spark-app-example.jar $APP_DIR/
 
 WORKDIR $APP_DIR

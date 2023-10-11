@@ -1,0 +1,12 @@
+bases:
+- ../../base
+
+resources:
+- ingress.yaml
+
+secretGenerator:
+- name: s3-secrets
+  literals:
+  - S3_ACCESS_KEY=admin
+  - S3_SECRET_KEY=1f2d1e2e67df
+  - S3_BUCKET_NAME=dev-default-bucket

@@ -1,10 +1,10 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: dev-ingress
+  name: prd-ingress
 spec:
   rules:
-  - host: s3.dev.local
+  - host: s3.prd.local
     http:
       paths:
       - backend:
@@ -15,7 +15,7 @@ spec:
         path: /
         pathType: Prefix
 
-  - host: spark-hs.dev.local
+  - host: spark-hs.prd.local
     http:
       paths:
       - backend:
@@ -25,7 +25,7 @@ spec:
               number: 18080
         path: /
         pathType: Prefix
-  - host: spark-ui.dev.local
+  - host: spark-ui.prd.local
     http:
       paths:
       - backend:

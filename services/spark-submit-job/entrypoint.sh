@@ -47,4 +47,5 @@ spark-submit \
     --conf spark.hadoop.fs.s3a.path.style.access=true \
     --conf spark.hadoop.fs.s3a.access.key=$S3_ACCESS_KEY \
     --conf spark.hadoop.fs.s3a.secret.key=$S3_SECRET_KEY \
-    s3a://$S3_BUCKET_NAME/spark-app-example.jar 10 120
+    --conf spark.ui.reverseProxy=true \
+    s3a://$S3_BUCKET_NAME/spark-app-example.jar 10 600

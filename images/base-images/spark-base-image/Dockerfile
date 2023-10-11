@@ -19,8 +19,8 @@ RUN cd ${SRC_DIR} \
     && unzip -qq spark.zip \
     && cd spark-${SPARK_VERSION} \
     && git apply ../s3a-support.patch \
-    && mvn install -pl core,streaming,assembly -Pscala-2.13 -Pscala-2.12 -Pkubernetes -Phive -Phive-thriftserver -T 1 -DskipTests --no-transfer-progress -e \
-    && cp -r sbin bin conf assembly/target/scala-2.13/jars ${DIST_DIR} \
+    && mvn install -pl core,streaming,assembly -Pkubernetes -Phive -Phive-thriftserver -T 1 -DskipTests --no-transfer-progress \
+    && cp -r sbin bin conf assembly/target/scala-2.12/jars ${DIST_DIR} \
     && mvn clean \
     && rm -rf ${SRC_DIR}
 

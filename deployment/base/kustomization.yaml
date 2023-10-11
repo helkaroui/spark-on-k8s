@@ -3,7 +3,7 @@ bases:
 - ../../services/spark-reverse-proxy
 - ../../services/spark-submit-job
 - ../../services/s3
-- ../../services/airflow
 
 resources:
 - spark-sa.yaml
+- reverse-proxy-sa.yaml

@@ -1,7 +1,7 @@
-spark-submit:
-	echo "Starting Skaffold using profile: spark-submit"
-	skaffold dev -n default -p spark-submit --status-check=false --tail
+dev:
+	echo "Starting Skaffold using profile: dev"
+	skaffold dev -n default -p dev --status-check=false --tail
 
-airflow:
-	echo "Starting Skaffold using profile: airflow"
-	skaffold dev -n default -p airflow --status-check=false --tail
+prod:
+	echo "Starting Skaffold using profile: prod"
+	skaffold dev -n default -p prod --status-check=false --tail

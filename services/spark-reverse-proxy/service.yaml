@@ -20,6 +20,7 @@ spec:
         image: spark-reverse-proxy
       imagePullSecrets:
       - name: regcred
+      serviceAccountName: reverse-proxy-sa
 ---
 
 apiVersion: v1
